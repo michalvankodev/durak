@@ -1,9 +1,13 @@
-class hello_world : Object {
+class durak : Object {
 	public static int main (string[] args) {
 		stdout.printf("Hello World\n");
 		
-		Card my = new Card(11, Card.C_type.HEARTS);
-		stdout.printf("card %s", my.to_short_string());
+		Stack my = new Stack();
+		stdout.printf("%d", my.remaining_cards());
+		
+		for (uint i = 0; i < my.remaining_cards(); i++) {
+			stdout.printf("%s \n", my.stack.nth_data(i).to_string());
+		}
 		return 0;
 	}
 }

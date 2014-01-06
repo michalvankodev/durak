@@ -43,11 +43,16 @@ public class Card : Object {
 	}
 	
 	private string transfer_card_value() {
-		if (this.card_value > 10) {
-			char corresponding_char = (char) this.card_value + 54 ;
-			return corresponding_char.to_string();
-		}
-		return this.card_value.to_string();
+		if(this.card_value == 11)
+			return "J";
+		else if (this.card_value == 12)
+			return "Q";
+		else if (this.card_value == 13)
+			return "K";
+		else if (this.card_value == 14)
+			return "A";
+		else
+			return this.card_value.to_string();
 	}
 	
 	
