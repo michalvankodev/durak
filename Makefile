@@ -1,9 +1,9 @@
 # This is Makefile for durak
 # you should run 'make debug' for debugging purposes
 
-all:
+all: src/*.vala
 	valac src/*.vala -o durak
 clean:
 	rm durak
-debug: 
+debug: src/*.vala
 	valac src/*vala -o debug/durak
