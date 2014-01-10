@@ -6,4 +6,5 @@ all: src/*.vala
 clean:
 	rm durak
 debug: src/*.vala
+	mkdir -p debug
 	valac src/*vala -o debug/durak
