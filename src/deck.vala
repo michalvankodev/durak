@@ -1,7 +1,7 @@
-public class Stack : Object {
+public class Deck : Object {
 		public List<Card> cards = new List<Card>();
 		
-		public cards() {
+		public Deck() {
 			for (int card_value = 6; card_value < 15; card_value++) {
 				this.cards.append(new Card(card_value, Card.C_type.HEARTS));
 				this.cards.append(new Card(card_value, Card.C_type.DIAMONDS));
@@ -24,5 +24,11 @@ public class Stack : Object {
 				this.cards.append(to_be_shuffled);
 				
 			}
+		}
+		
+		public Card push_card() {
+			Card pushed = this.cards.nth_data(0);
+			this.cards.remove(pushed);
+			return pushed;
 		}
 }
