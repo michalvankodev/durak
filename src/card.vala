@@ -1,9 +1,9 @@
 public class Card : Object {
 	
-	private int card_value;
-	private C_type card_type;
+	public int card_value { get; private set;}
+	public Card_type card_type { get; private set;}
 	
-	public enum C_type {
+	public enum Card_type {
 		HEARTS,
 		DIAMONDS,
 		SPADES,
@@ -29,7 +29,7 @@ public class Card : Object {
 		}
 	}
 	
-	public Card(int _card_value, C_type _card_type) {
+	public Card(int _card_value, Card_type _card_type) {
 		this.card_value = _card_value;
 		this.card_type = _card_type;
 	}
@@ -54,6 +54,5 @@ public class Card : Object {
 		else
 			return this.card_value.to_string();
 	}
-	
 	
 }

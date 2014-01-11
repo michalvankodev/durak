@@ -3,10 +3,10 @@ public class Deck : Object {
 		
 		public Deck() {
 			for (int card_value = 6; card_value < 15; card_value++) {
-				this.cards.append(new Card(card_value, Card.C_type.HEARTS));
-				this.cards.append(new Card(card_value, Card.C_type.DIAMONDS));
-				this.cards.append(new Card(card_value, Card.C_type.SPADES));
-				this.cards.append(new Card(card_value, Card.C_type.CLUBS));
+				this.cards.append(new Card(card_value, Card.Card_type.HEARTS));
+				this.cards.append(new Card(card_value, Card.Card_type.DIAMONDS));
+				this.cards.append(new Card(card_value, Card.Card_type.SPADES));
+				this.cards.append(new Card(card_value, Card.Card_type.CLUBS));
 			}
 			this.shuffle();
 		}
@@ -30,5 +30,9 @@ public class Deck : Object {
 			Card pushed = this.cards.nth_data(0);
 			this.cards.remove(pushed);
 			return pushed;
+		}
+		
+		public void insert_trump(Card card) {
+			this.cards.append(card);
 		}
 }

@@ -2,7 +2,7 @@ public class Game : Object {
 	private Player[] players;
 	private Deck deck;
 	private Discard_pile discard_pile;
-	private Card.C_type trump;
+	private Card.Card_type trump;
 	private Player player_on_turn;
 	private States state;
 	
@@ -26,7 +26,7 @@ public class Game : Object {
 	private void start_game() {
 		this.state = States.FIGURING;
 		this.deal_deck();
-		this.reveal_trump();
+		this.trump = this.select_trump();
 		
 		this.choose_attacker();
 		this.next_turn();
@@ -38,5 +38,13 @@ public class Game : Object {
 				this.players[i].take_card(this.deck.push_card());
 			}
 		}
+	}
+	
+	private Card.Card_type select_trump() {
+		Card trump_card = this.deck.push_card();
+
+		this.deck.insert_trump(trump_card);
+		return trump_card.card_type;
+		
 	}
 }
