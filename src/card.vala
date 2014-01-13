@@ -55,4 +55,7 @@ public class Card : Object {
 			return this.card_value.to_string();
 	}
 	
+	*/ TODO: Compare function */
+	
+	
 }

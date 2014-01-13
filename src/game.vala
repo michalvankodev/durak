@@ -28,7 +28,7 @@ public class Game : Object {
 		this.deal_deck();
 		this.trump = this.select_trump();
 		
-		this.choose_attacker();
+		this.player_on_turn = this.choose_first_attacker();
 		this.next_turn();
 	}
 	
@@ -46,5 +46,17 @@ public class Game : Object {
 		this.deck.insert_trump(trump_card);
 		return trump_card.card_type;
 		
+	}
+	
+	private Player choose_first_attacker() {
+		Player with_lowest_card = this.players[0];
+		
+		for (int i = 1; i < this.players.length; i++) {
+			if (this.players[i].get_lowest_card() < with_lowest_card.get_lowest_card()) {
+				with_lowest_card = this.players[i];
+			}
+		}
+		
+		return with_lowest_card;
 	}
 }
