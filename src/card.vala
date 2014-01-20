@@ -55,20 +55,20 @@ public class Card : Object {
 			return this.value.to_string();
 	}
 	
-	/* TODO: Compare function 
+	/* 
 	 This function returns  
 	 return  a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object 
 	 according to DURAK's rules.
 	 so if the card is trump it wins
 	 */
-	public int durak_compare_to(Card card1, Card card2, Card_type trump) {
-		if (card1.type == card2.type) {
-			return card1.value - card2.value;
+	public int durak_compare_to(Card card2, Card_type trump) {
+		if (this.type == card2.type) {
+			return this.value - card2.value;
 		}
-		else if (card1.type == trump) {
-			return -1;
+		else if (this.type == trump) {
+			return 1;
 		}
-		else return card1.value - card2.value;
+		else return this.value - card2.value;
 	}
 	
 	
