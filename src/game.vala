@@ -1,7 +1,8 @@
 public class Game : Object {
 	private Player[] players;
 	private Deck deck;
-	private Discard_pile discard_pile;
+	private List<Card> discard_pile;
+	private List<Card> cards_on_table
 	private Card.Card_type trump;
 	private Player player_on_turn;
 	private States state;
@@ -29,9 +30,48 @@ public class Game : Object {
 		this.trump = this.select_trump();
 		
 		this.player_on_turn = this.choose_first_attacker();
-		this.next_turn();
+		this.state = ATTACK;
 	}
 	
+	private void attack_with(Player attacker, Card card){
+		cards_on_table.append(card);
+		attacker.play_card(card);
+		this.state = DEFENSE;
+	}
+	
+	private void defend_with(Player defender, Card card){
+		cards_on_table.append(card);
+		defender.play_card(card);
+		this.state = SECOND_ATTACK;
+	}
+	
+	private void take_cards_from_table(Player receiver) {
+		this.state = FIGURING;
+		
+		this.cards_on_table.foreach((card) => {
+			cards_on_table.remove(card);
+			receiver.take_card(card);
+		});
+		this.state = ATTACK;
+	}
+	
+	private void pass_second_attack(){
+		this.state = FIGURING;
+		
+		this.discard_cards_on_table();
+		
+	}
+	
+	private void discard_cards_on_table() {
+		this.cards_on_table.reverse();
+		
+		this.cards_on_table.foreach((card) => {
+			this.cards_on_table.remove(card);
+			this.discard_pile.append(card));
+		});
+		this.state = ATTACK;
+	}
+
 	private void deal_deck() {
 		for (int no_cards = 0; no_cards < 6; no_cards++) {
 			for (int i = 0; i < this.players.length; i++) {

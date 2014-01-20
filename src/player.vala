@@ -4,6 +4,9 @@ public class Player : Object {
 	public void take_card(Card card) {
 		this.hand.append(card);
 	}
+	public void play_card(Card card){
+		this.hand.remove(card);
+	}
 	
 	public Card? get_lowest_trump_card(Card.Card_type? trump){
 		Card? lowest_trump_card;
@@ -19,4 +22,5 @@ public class Player : Object {
 		});
 		return lowest_trump_card;
 	}
+	
 }
