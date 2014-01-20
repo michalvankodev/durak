@@ -9,10 +9,10 @@ public class Player : Object {
 	}
 	
 	public Card? get_lowest_trump_card(Card.Card_type? trump){
-		Card? lowest_trump_card;
+		Card lowest_trump_card = null;
 		this.hand.foreach((card) => {
-			if (card.type == trump) {
-				if (lowest_trump_card != null) {
+			if (card.card_type == trump) {
+				if (lowest_trump_card == null) {
 					lowest_trump_card = card;
 				}
 				else if (card.value < lowest_trump_card.value) {

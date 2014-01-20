@@ -1,8 +1,8 @@
 public class Game : Object {
 	private Player[] players;
 	private Deck deck;
-	private List<Card> discard_pile;
-	private List<Card> cards_on_table
+	private List<Card> discard_pile = new List<Card>();
+	private List<Card> cards_on_table = new List<Card>();
 	private Card.Card_type trump;
 	private Player player_on_turn;
 	private States state;
@@ -30,33 +30,33 @@ public class Game : Object {
 		this.trump = this.select_trump();
 		
 		this.player_on_turn = this.choose_first_attacker();
-		this.state = ATTACK;
+		this.state = States.ATTACK;
 	}
 	
 	private void attack_with(Player attacker, Card card){
 		cards_on_table.append(card);
 		attacker.play_card(card);
-		this.state = DEFENSE;
+		this.state = States.DEFENSE;
 	}
 	
 	private void defend_with(Player defender, Card card){
 		cards_on_table.append(card);
 		defender.play_card(card);
-		this.state = SECOND_ATTACK;
+		this.state = States.SECOND_ATTACK;
 	}
 	
 	private void take_cards_from_table(Player receiver) {
-		this.state = FIGURING;
+		this.state = States.FIGURING;
 		
 		this.cards_on_table.foreach((card) => {
 			cards_on_table.remove(card);
 			receiver.take_card(card);
 		});
-		this.state = ATTACK;
+		this.state = States.ATTACK;
 	}
 	
 	private void pass_second_attack(){
-		this.state = FIGURING;
+		this.state = States.FIGURING;
 		
 		this.discard_cards_on_table();
 		
@@ -67,9 +67,9 @@ public class Game : Object {
 		
 		this.cards_on_table.foreach((card) => {
 			this.cards_on_table.remove(card);
-			this.discard_pile.append(card));
+			this.discard_pile.append(card);
 		});
-		this.state = ATTACK;
+		this.state = States.ATTACK;
 	}
 
 	private void deal_deck() {
@@ -84,7 +84,7 @@ public class Game : Object {
 		Card trump_card = this.deck.push_card();
 
 		this.deck.insert_trump(trump_card);
-		return trump_card.type;
+		return trump_card.card_type;
 		
 	}
 	
@@ -93,7 +93,7 @@ public class Game : Object {
 	 */
 	
 	private Player choose_first_attacker() {
-		Player with_lowest_trump_card;
+		Player with_lowest_trump_card = null;
 		
 		foreach(Player player in this.players){
 			if (player.get_lowest_trump_card(this.trump) != null) {

@@ -1,7 +1,7 @@
 public class Card : Object {
 	
 	public int value { get; private set;}
-	public Card_type type { get; private set;}
+	public Card_type card_type { get; private set;}
 	
 	public enum Card_type {
 		HEARTS,
@@ -31,15 +31,15 @@ public class Card : Object {
 	
 	public Card(int _value, Card_type _type) {
 		this.value = _value;
-		this.type = _type;
+		this.card_type = _type;
 	}
 	
 	public string to_string() {
-		return this.transfer_value() + " of " + this.type.to_string();
+		return this.transfer_value() + " of " + this.card_type.to_string();
 	}
 	
 	public string to_short_string() {
-		return this.transfer_value() + this.type.to_string()[0].to_string().down();
+		return this.transfer_value() + this.card_type.to_string()[0].to_string().down();
 	}
 	
 	private string transfer_value() {
@@ -62,10 +62,10 @@ public class Card : Object {
 	 so if the card is trump it wins
 	 */
 	public int durak_compare_to(Card card2, Card_type trump) {
-		if (this.type == card2.type) {
+		if (this.card_type == card2.card_type) {
 			return this.value - card2.value;
 		}
-		else if (this.type == trump) {
+		else if (this.card_type == trump) {
 			return 1;
 		}
 		else return this.value - card2.value;
