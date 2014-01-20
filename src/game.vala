@@ -55,19 +55,19 @@ public class Game : Object {
 	private Player choose_first_attacker() {
 		Player with_lowest_trump_card;
 		
-		this.players.foreach((player) => {
-			if (player.get_lowest_trump_card(this.trump)) {
+		foreach(Player player in this.players){
+			if (player.get_lowest_trump_card(this.trump) != null) {
 				
-				if (!with_lowest_trump_card) 
+				if (with_lowest_trump_card == null) 
 					with_lowest_trump_card = player;
 				
-				else if(player.get_lowest_trump_card(this.trump).value < with_lowest_card.get_lowest_trump_card(this.trump).value)
+				else if(player.get_lowest_trump_card(this.trump).value < with_lowest_trump_card.get_lowest_trump_card(this.trump).value)
 					with_lowest_trump_card = player;
 			}
-		});
+		}
 		
-		if (!with_lowest_trump_card) {
-			with_lowest_trump_card = this.players[Random.next_int(0,this.players.length())];
+		if (with_lowest_trump_card == null) {
+			with_lowest_trump_card = this.players[Random.int_range(0,this.players.length)];
 		}
 		
 		return with_lowest_trump_card;
