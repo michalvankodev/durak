@@ -44,19 +44,32 @@ public class Game : Object {
 		Card trump_card = this.deck.push_card();
 
 		this.deck.insert_trump(trump_card);
-		return trump_card.card_type;
+		return trump_card.type;
 		
 	}
 	
+	/*
+	 * This function will consider rule about lowest trump_card of the each player.
+	 */
+	
 	private Player choose_first_attacker() {
-		Player with_lowest_card = this.players[0];
+		Player with_lowest_trump_card;
 		
-		for (int i = 1; i < this.players.length; i++) {
-			if (this.players[i].get_lowest_card() < with_lowest_card.get_lowest_card()) {
-				with_lowest_card = this.players[i];
+		this.players.foreach((player) => {
+			if (player.get_lowest_trump_card(this.trump)) {
+				
+				if (!with_lowest_trump_card) 
+					with_lowest_trump_card = player;
+				
+				else if(player.get_lowest_trump_card(this.trump).value < with_lowest_card.get_lowest_trump_card(this.trump).value)
+					with_lowest_trump_card = player;
 			}
+		});
+		
+		if (!with_lowest_trump_card) {
+			with_lowest_trump_card = this.players[Random.next_int(0,this.players.length())];
 		}
 		
-		return with_lowest_card;
+		return with_lowest_trump_card;
 	}
 }

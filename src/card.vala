@@ -1,7 +1,7 @@
 public class Card : Object {
 	
-	public int card_value { get; private set;}
-	public Card_type card_type { get; private set;}
+	public int value { get; private set;}
+	public Card_type type { get; private set;}
 	
 	public enum Card_type {
 		HEARTS,
@@ -29,33 +29,47 @@ public class Card : Object {
 		}
 	}
 	
-	public Card(int _card_value, Card_type _card_type) {
-		this.card_value = _card_value;
-		this.card_type = _card_type;
+	public Card(int _value, Card_type _type) {
+		this.value = _value;
+		this.type = _type;
 	}
 	
 	public string to_string() {
-		return this.transfer_card_value() + " of " + this.card_type.to_string();
+		return this.transfer_value() + " of " + this.type.to_string();
 	}
 	
 	public string to_short_string() {
-		return this.transfer_card_value() + this.card_type.to_string()[0].to_string().down();
+		return this.transfer_value() + this.type.to_string()[0].to_string().down();
 	}
 	
-	private string transfer_card_value() {
-		if(this.card_value == 11)
+	private string transfer_value() {
+		if(this.value == 11)
 			return "J";
-		else if (this.card_value == 12)
+		else if (this.value == 12)
 			return "Q";
-		else if (this.card_value == 13)
+		else if (this.value == 13)
 			return "K";
-		else if (this.card_value == 14)
+		else if (this.value == 14)
 			return "A";
 		else
-			return this.card_value.to_string();
+			return this.value.to_string();
 	}
 	
-	*/ TODO: Compare function */
+	/* TODO: Compare function 
+	 This function returns  
+	 return  a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object 
+	 according to DURAK's rules.
+	 so if the card is trump it wins
+	 */
+	public int durak_compare_to(Card card1, Card card2, Card_type trump) {
+		if (card1.type == card2.type) {
+			return card1.value - card2.value;
+		}
+		else if (card1.type == trump) {
+			return -1;
+		}
+		else return card1.value - card2.value;
+	}
 	
 	
 }
