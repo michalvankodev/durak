@@ -55,7 +55,7 @@ public class Card : Object {
 			return this.value.to_string();
 	}
 	
-	/* 
+	/** 
 	 This function returns  
 	 return  a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object 
 	 according to DURAK's rules.
