@@ -7,5 +7,5 @@ clean:
 	rm durak
 debug: src/*.vala
 	mkdir -p debug
-	valac -g src/*vala -o debug/durak --pkg gee-0.8
+	valac -g src/*vala -o debug/durak --pkg gee-0.8 --pkg json-glib-1.0 --pkg gio-2.0
 

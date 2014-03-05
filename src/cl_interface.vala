@@ -6,8 +6,8 @@ public class Cl_interface : Object, user_interface {
 	delegate void Action();
 	
 	public Cl_interface() {
-		generate_menus();
-		display_main_menu();
+		this.generate_menus();
+		this.display_menu("main_menu");
 	}
 	
 	private void generate_menus() {
@@ -38,12 +38,9 @@ public class Cl_interface : Object, user_interface {
 	public void display_menu(string menu_id) {
 		if (this.menus[menu_id] != null)
 			this.menus[menu_id].display();
+		else
+			stdout.printf("ERROR: Menu " + menu_id + " doesn't exist.");
 	}
-	
-	public void display_main_menu() {
-		this.display_menu("main_menu");
-	}
-	
 	
 	private class Menu : Object {
 		public string text;
@@ -99,7 +96,5 @@ public class Cl_interface : Object, user_interface {
 			return this.text;
 		}
 	}
-	// MENU WILL FUNCTION AS HASHMAP
-	/* FIGURE OUT pointing to function from another method
-	 Look up delegates and signals. Find actual solution...*/
+	
 }
