@@ -1,16 +1,21 @@
 using Gee;
 public class Cl_interface : Object, user_interface {
 	private const int MAIN = 0;
+	private Game_settings settings;
 	
 	private HashMap<string, Menu> menus = new HashMap<string, Menu>();
 	delegate void Action();
 	
-	public Cl_interface() {
+	public Cl_interface(Game_settings _settings) {
+		this.settings = _settings;
 		this.generate_menus();
 		this.display_menu("main_menu");
 	}
 	
 	private void generate_menus() {
+		// Back to main menu action
+		Action back_to_main = () => { this.display_menu("main_menu"); };
+		
 		// Main menu 
 		Menu main = new Menu();
 		main.text = "Hello there my friend.\n"+
@@ -18,6 +23,12 @@ public class Cl_interface : Object, user_interface {
 			"Main menu: (type number and press ENTER to continue)\n";
 		Action new_game_menu = () => { this.display_menu("new_game_menu"); };
 		main.add_option(new Option("Start new game", new_game_menu));
+		
+		Action to_settings = () => { this.display_menu("settings_menu"); };
+		main.add_option(new Option("Settings", to_settings));
+		
+		Action quit = () => { this.quit(); };
+		main.add_option(new Option("Quit", quit));
 		
 		this.menus.set("main_menu", main);
 		
@@ -31,7 +42,24 @@ public class Cl_interface : Object, user_interface {
 		Action host_game = () => { };
 		new_game.add_option(new Option("Host online game", host_game));
 		
+		new_game.add_option(new Option("Back", back_to_main));
+		
 		this.menus.set("new_game_menu", new_game);
+		
+		// Setting menu
+		Menu settings_menu = new Menu();
+		settings_menu.text = "Settings menu:\n";
+		
+		Action change_name = () => {
+			this.change_name();
+			this.display_menu("settings_menu");
+			
+		};
+		settings_menu.add_option(new Option("Change name", change_name));
+		settings_menu.add_option(new Option("Back", back_to_main));
+		
+		this.menus.set("settings_menu", settings_menu);
+		
 		
 	}
 	
@@ -40,6 +68,16 @@ public class Cl_interface : Object, user_interface {
 			this.menus[menu_id].display();
 		else
 			stdout.printf("ERROR: Menu " + menu_id + " doesn't exist.");
+	}
+	
+	public void quit() {
+		stdout.printf("Goodbye !\n");
+	}
+	
+	public void change_name() {
+		stdout.printf("What's your name? \n");
+		this.settings.player_name = stdin.read_line();
+		stdout.printf("Nice to meet you " + this.settings.player_name +" \n");
 	}
 	
 	private class Menu : Object {
