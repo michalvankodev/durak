@@ -9,9 +9,9 @@ public class Player : Object {
 		this.hand.append(card);
 	}
 	public void take_cards(Card[] cards) {
-		cards.foreach((card) => {
+		foreach (Card card in cards) {
 			this.take_card(card);
-		});
+		}
 	}
 	public void play_card(Card card){
 		this.hand.remove(card);
