@@ -1,8 +1,17 @@
 public class Player : Object {
 	private List<Card> hand = new List<Card>();
+	public string name {get; private set;}
 	
+	public Player(string _name) {
+		this.name = _name;
+	}
 	public void take_card(Card card) {
 		this.hand.append(card);
+	}
+	public void take_cards(Card[] cards) {
+		cards.foreach((card) => {
+			this.take_card(card);
+		});
 	}
 	public void play_card(Card card){
 		this.hand.remove(card);
