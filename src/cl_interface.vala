@@ -1,7 +1,8 @@
 using Gee;
 public class Cl_interface : Object, user_interface {
-	private const int MAIN = 0;
 	private Game_settings settings;
+	private Network network;
+	private MainLoop mainloop;
 	
 	private HashMap<string, Menu> menus = new HashMap<string, Menu>();
 	delegate void Action();
@@ -9,6 +10,7 @@ public class Cl_interface : Object, user_interface {
 	public Cl_interface(Game_settings _settings) {
 		this.settings = _settings;
 		this.generate_menus();
+		this.mainloop.run();
 		this.display_menu("main_menu");
 	}
 	
@@ -39,6 +41,9 @@ public class Cl_interface : Object, user_interface {
 		Action local_game = () => { this.display_menu("local_game_menu"); };
 		new_game.add_option(new Option("Play against computer", local_game));
 		
+		Action connect_to_game = () => { this.connect_to_game(); };
+		new_game.add_option(new Option("Connect to new online game", connect_to_game));
+		
 		Action host_game = () => { };
 		new_game.add_option(new Option("Host online game", host_game));
 		
@@ -59,9 +64,37 @@ public class Cl_interface : Object, user_interface {
 		settings_menu.add_option(new Option("Back", back_to_main));
 		
 		this.menus.set("settings_menu", settings_menu);
-		
-		
 	}
+	
+	public void connect_to_game() {
+		
+		stdout.printf("Type IP of the game host:\nType 'q' to return to menu:\n");
+		string host_ip = stdin.read_line();
+		if (host_ip == "q") {
+			this.display_menu("new_game_menu");
+		} else {
+			this.network = new Network_client(host_ip);
+			
+			/* Connect to host and wait for players to load 
+			 * and when host runs the game notify and start game
+			 * Create MAINLOOP for waiting on the notifications
+			 */ 
+			
+			if (network.connected) {
+				stdout.printf("Successfully connected to " + host_ip + "\nWaiting for game to start");
+				//Figure out how to asyncly wait for game start
+				stdout.printf("Players connected:\n");
+				string[] players_names = network.get_players_names();
+				int n = 0;
+				foreach (string player_name in players_names) {
+					stdout.printf((++n).to_string() + ". " + player_name + "\n");
+				}
+			} else {
+				stdout.printf("Connection failed.\n");
+				this.connect_to_game();
+			}
+		}
+	}	
 	
 	public void display_menu(string menu_id) {
 		if (this.menus[menu_id] != null)
@@ -72,6 +105,7 @@ public class Cl_interface : Object, user_interface {
 	
 	public void quit() {
 		stdout.printf("Goodbye !\n");
+		this.mainloop.quit();
 	}
 	
 	public void change_name() {
