@@ -2,15 +2,18 @@ using Gee;
 public class Cl_interface : Object, user_interface {
 	private Game_settings settings;
 	private Network network;
-	private MainLoop mainloop;
+	private MainLoop waitloop;
+	
+	public Player main_player; 
 	
 	private HashMap<string, Menu> menus = new HashMap<string, Menu>();
 	delegate void Action();
 	
 	public Cl_interface(Game_settings _settings) {
 		this.settings = _settings;
+		this.main_player = new Player(settings.player_name);
 		this.generate_menus();
-		this.mainloop.run();
+		waitloop = new MainLoop();
 		this.display_menu("main_menu");
 	}
 	
@@ -73,28 +76,37 @@ public class Cl_interface : Object, user_interface {
 		if (host_ip == "q") {
 			this.display_menu("new_game_menu");
 		} else {
-			this.network = new Network_client(host_ip);
+			this.network = new Network_client(host_ip, this.main_player, waitloop);
 			
 			/* Connect to host and wait for players to load 
 			 * and when host runs the game notify and start game
 			 * Create MAINLOOP for waiting on the notifications
-			 */ 
+			 */
 			
 			if (network.connected) {
 				stdout.printf("Successfully connected to " + host_ip + "\nWaiting for game to start");
-				//Figure out how to asyncly wait for game start
-				stdout.printf("Players connected:\n");
-				string[] players_names = network.get_players_names();
-				int n = 0;
-				foreach (string player_name in players_names) {
-					stdout.printf((++n).to_string() + ". " + player_name + "\n");
-				}
+				this.wait_for_players();
 			} else {
 				stdout.printf("Connection failed.\n");
 				this.connect_to_game();
 			}
 		}
-	}	
+	}
+	
+	private void wait_for_players() {
+		//Figure out how to asyncly wait for game start
+		this.get_connected_players();
+		
+	}
+	
+	private void get_connected_players() {
+		stdout.printf("Players connected:\n");
+		Player[] players = network.connected_players;
+		int n = 0;
+		foreach (Player player in players) {
+			stdout.printf((++n).to_string() + ". " + player.name + "\n");
+		}
+	}
 	
 	public void display_menu(string menu_id) {
 		if (this.menus[menu_id] != null)
@@ -105,7 +117,6 @@ public class Cl_interface : Object, user_interface {
 	
 	public void quit() {
 		stdout.printf("Goodbye !\n");
-		this.mainloop.quit();
 	}
 	
 	public void change_name() {

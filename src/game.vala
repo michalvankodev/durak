@@ -16,9 +16,9 @@ public class Game : Object {
 	
 	public int turn;
 	
-	public Game(int number_of_players) {
+	public Game(Player[] players) {
 		this.turn = 0;
-		this.players = new Player[number_of_players];
+		this.players = players;
 		this.deck = new Deck();
 		
 		this.start_game();

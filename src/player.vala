@@ -1,6 +1,7 @@
 public class Player : Object {
 	private List<Card> hand = new List<Card>();
 	public string name {get; private set;}
+	public string address {get; set; default = "Local";}
 	
 	public Player(string _name) {
 		this.name = _name;
