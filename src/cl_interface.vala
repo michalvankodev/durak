@@ -47,7 +47,7 @@ public class Cl_interface : Object, user_interface {
 		Action connect_to_game = () => { this.connect_to_game(); };
 		new_game.add_option(new Option("Connect to new online game", connect_to_game));
 		
-		Action host_game = () => { };
+		Action host_game = () => { this.host_online_game(); };
 		new_game.add_option(new Option("Host online game", host_game));
 		
 		new_game.add_option(new Option("Back", back_to_main));
@@ -83,7 +83,7 @@ public class Cl_interface : Object, user_interface {
 			 * Create MAINLOOP for waiting on the notifications
 			 */
 			
-			if (network.connected) {
+			if (this.network.connected) {
 				stdout.printf("Successfully connected to " + host_ip + "\nWaiting for game to start");
 				this.wait_for_players();
 			} else {
@@ -93,10 +93,25 @@ public class Cl_interface : Object, user_interface {
 		}
 	}
 	
+	public void host_online_game() {
+		this.network = new Network_host(this.main_player, this.waitloop);
+		if (this.network.connected) {
+			stdout.printf("Hosting a game. Waiting for players. \n");
+			this.wait_for_players();
+		} else {
+			stdout.printf("Something went wrong\n");
+		}
+	}
+	
 	private void wait_for_players() {
 		//Figure out how to asyncly wait for game start
 		this.get_connected_players();
-		
+		while (true) {
+			if (this.network.is_on_turn(this.main_player))
+				break;
+		}
+		stdout.printf("You have succesfully waited to this moment");
+		stdin.read_line();
 	}
 	
 	private void get_connected_players() {

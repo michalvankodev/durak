@@ -1,7 +1,7 @@
 public class Network_client : Network {
-	MainLoop waitloop;
-	SocketClient client;
-	SocketConnection connection;
+	private MainLoop waitloop;
+	protected SocketClient client;
+	protected SocketConnection connection;
 	
 	public Network_client(string address, Player player, MainLoop loop) {
 		base.main_player = player;
@@ -18,7 +18,7 @@ public class Network_client : Network {
 			
 			this.client = new SocketClient();
 			this.connection = yield this.client.connect_async(socket_address);
-			base.connected = true;
+			this.connected = true;
 			
 		} catch (Error e) {
 			stderr.printf("%s \n", e.message);
