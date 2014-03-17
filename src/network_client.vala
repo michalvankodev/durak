@@ -26,4 +26,26 @@ public class Network_client : Network {
 		waitloop.quit();
 	}
 	
+	public override Player? add_player(Player player) {
+		try {
+			player.address = "get players address";
+			string message = "add_player: " + Json.gobject_to_data(player, null);
+			
+			stdout.printf(message);
+			this.send_request.begin(message);
+			this.waitloop.run();
+			return player;
+		} catch (Error e) {
+			stderr.printf("%s \n", e.message);
+			return null;
+		}
+		
+	}
+	
+	private async void send_request(string message) {
+		
+		yield this.connection.output_stream.write_async(message.data, Priority.DEFAULT);
+		stdout.printf("Request sent\n");
+		this.waitloop.quit();
+	}
 }

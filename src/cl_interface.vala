@@ -84,7 +84,11 @@ public class Cl_interface : Object, user_interface {
 			 */
 			
 			if (this.network.connected) {
-				stdout.printf("Successfully connected to " + host_ip + "\nWaiting for game to start");
+				stdout.printf("Successfully connected to " + host_ip + "\n");
+				
+				this.network.add_player(this.main_player);
+				
+				stdout.printf("Waiting for game to start\n");
 				this.wait_for_players();
 			} else {
 				stdout.printf("Connection failed.\n");
@@ -96,6 +100,7 @@ public class Cl_interface : Object, user_interface {
 	public void host_online_game() {
 		this.network = new Network_host(this.main_player, this.waitloop);
 		if (this.network.connected) {
+			this.network.add_player(this.main_player);
 			stdout.printf("Hosting a game. Waiting for players. \n");
 			this.wait_for_players();
 		} else {
@@ -106,21 +111,22 @@ public class Cl_interface : Object, user_interface {
 	private void wait_for_players() {
 		//Figure out how to asyncly wait for game start
 		this.get_connected_players();
-		while (true) {
+		this.waitloop.run();
+		/*while (true) {
 			if (this.network.is_on_turn(this.main_player))
 				break;
-		}
+		}*/
 		stdout.printf("You have succesfully waited to this moment");
 		stdin.read_line();
 	}
 	
 	private void get_connected_players() {
 		stdout.printf("Players connected:\n");
-		Player[] players = network.connected_players;
+		
 		int n = 0;
-		foreach (Player player in players) {
+		network.connected_players.foreach ((player) => {
 			stdout.printf((++n).to_string() + ". " + player.name + "\n");
-		}
+		});
 	}
 	
 	public void display_menu(string menu_id) {
