@@ -1,8 +1,7 @@
 public class Network_host : Network {
 	protected SocketService server;
-	private MainLoop waitloop;
 	
-	public Network_host(Player player, MainLoop loop) {
+	public Network_host(Player player) {
 		try {
 			this.server = new SocketService();
 			this.server.add_inet_port(38725, null);
@@ -11,8 +10,7 @@ public class Network_host : Network {
 			
 			this.connected_players = new List<Player>();
 			this.connected = true;
-			
-			this.waitloop = loop;
+
 			
 		} catch (Error e) {
 			stderr.printf("%s\n", e.message);
@@ -35,7 +33,6 @@ public class Network_host : Network {
 		} catch (Error e) {
 			stderr.printf("%s\n", e.message);
 		}
-		this.waitloop.quit();
 	}
 	private void create_server() {
 		

@@ -76,7 +76,7 @@ public class Cl_interface : Object, user_interface {
 		if (host_ip == "q") {
 			this.display_menu("new_game_menu");
 		} else {
-			this.network = new Network_client(host_ip, this.main_player, waitloop);
+			this.network = new Network_client(host_ip, this.main_player);
 			
 			/* Connect to host and wait for players to load 
 			 * and when host runs the game notify and start game
@@ -98,7 +98,7 @@ public class Cl_interface : Object, user_interface {
 	}
 	
 	public void host_online_game() {
-		this.network = new Network_host(this.main_player, this.waitloop);
+		this.network = new Network_host(this.main_player);
 		if (this.network.connected) {
 			this.network.add_player(this.main_player);
 			stdout.printf("Hosting a game. Waiting for players. \n");

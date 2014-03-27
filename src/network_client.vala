@@ -1,13 +1,11 @@
 public class Network_client : Network {
-	private MainLoop waitloop;
+
 	protected SocketClient client;
 	protected SocketConnection connection;
 	
-	public Network_client(string address, Player player, MainLoop loop) {
+	public Network_client(string address, Player player) {
 		base.main_player = player;
-		waitloop = loop;
 		this.create_connection.begin(address);
-		waitloop.run();
 	}
 	private async void create_connection(string address) throws Error {
 		try {
@@ -23,17 +21,15 @@ public class Network_client : Network {
 		} catch (Error e) {
 			stderr.printf("%s \n", e.message);
 		}
-		waitloop.quit();
 	}
 	
 	public override Player? add_player(Player player) {
 		try {
 			player.address = "get players address";
 			string message = "add_player: " + Json.gobject_to_data(player, null);
-			
 			stdout.printf(message);
+			
 			this.send_request.begin(message);
-			this.waitloop.run();
 			return player;
 		} catch (Error e) {
 			stderr.printf("%s \n", e.message);
@@ -46,6 +42,5 @@ public class Network_client : Network {
 		
 		yield this.connection.output_stream.write_async(message.data, Priority.DEFAULT);
 		stdout.printf("Request sent\n");
-		this.waitloop.quit();
 	}
 }
