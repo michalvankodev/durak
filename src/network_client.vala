@@ -17,9 +17,11 @@ public class Network_client : Network {
 			this.client = new SocketClient();
 			this.connection = yield this.client.connect_async(socket_address);
 			this.connected = true;
+			this.on_message_sent(true);
 			
 		} catch (Error e) {
 			stderr.printf("%s \n", e.message);
+			this.on_message_sent(false);
 		}
 	}
 	
@@ -39,7 +41,6 @@ public class Network_client : Network {
 	}
 	
 	private async void send_request(string message) {
-		
 		yield this.connection.output_stream.write_async(message.data, Priority.DEFAULT);
 		stdout.printf("Request sent\n");
 	}

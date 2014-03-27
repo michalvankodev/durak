@@ -27,9 +27,12 @@ public class Network_host : Network {
 			var dis = new DataInputStream(conn.input_stream);
 			var dos = new DataOutputStream(conn.output_stream);
 			
-			string req = yield dis.read_line_async (Priority.HIGH_IDLE);
-			stdout.printf(req);
+			string req = yield dis.read_upto_async("\0", 1, Priority.DEFAULT, null, null);
+			dis.read_byte(); //Consume end of stream "\0"
+			
 			stdout.printf("incoming message\n");
+			stdout.printf(req + "\n");
+			stdout.printf("end of message\n");
 		} catch (Error e) {
 			stderr.printf("%s\n", e.message);
 		}

@@ -77,11 +77,18 @@ public class Cl_interface : Object, user_interface {
 			this.display_menu("new_game_menu");
 		} else {
 			this.network = new Network_client(host_ip, this.main_player);
-			
+
 			/* Connect to host and wait for players to load 
 			 * and when host runs the game notify and start game
 			 * Create MAINLOOP for waiting on the notifications
-			 */
+			 */		
+			 	
+			ulong handler = this.network.on_message_sent.connect((t, success) => {
+				this.waitloop.quit();
+			});
+			
+			this.waitloop.run();
+			this.network.disconnect(handler);
 			
 			if (this.network.connected) {
 				stdout.printf("Successfully connected to " + host_ip + "\n");
@@ -94,6 +101,7 @@ public class Cl_interface : Object, user_interface {
 				stdout.printf("Connection failed.\n");
 				this.connect_to_game();
 			}
+			
 		}
 	}
 	
