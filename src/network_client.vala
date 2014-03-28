@@ -28,7 +28,7 @@ public class Network_client : Network {
 	public override Player? add_player(Player player) {
 		try {
 			player.address = "get players address";
-			string message = "add_player: " + Json.gobject_to_data(player, null);
+			string message = "add_player " + Json.gobject_to_data(player, null);
 			stdout.printf(message);
 			
 			this.send_request.begin(message);

@@ -107,6 +107,7 @@ public class Cl_interface : Object, user_interface {
 	
 	public void host_online_game() {
 		this.network = new Network_host(this.main_player);
+		
 		if (this.network.connected) {
 			this.network.add_player(this.main_player);
 			stdout.printf("Hosting a game. Waiting for players. \n");
@@ -119,6 +120,10 @@ public class Cl_interface : Object, user_interface {
 	private void wait_for_players() {
 		//Figure out how to asyncly wait for game start
 		this.get_connected_players();
+		this.network.new_player_connected.connect((t, player) => {
+			stdout.printf("New player "+ player.name +" connected.\n");
+			this.get_connected_players();		
+		});
 		this.waitloop.run();
 		/*while (true) {
 			if (this.network.is_on_turn(this.main_player))
