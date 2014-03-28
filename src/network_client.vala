@@ -16,6 +16,7 @@ public class Network_client : Network {
 			
 			this.client = new SocketClient();
 			this.connection = yield this.client.connect_async(socket_address);
+			
 			this.connected = true;
 			this.on_message_sent(true);
 			
@@ -27,7 +28,8 @@ public class Network_client : Network {
 	
 	public override Player? add_player(Player player) {
 		try {
-			player.address = "get players address";
+			var netAddress = (InetSocketAddress)this.connection.get_local_address();
+			player.address = netAddress.address.to_string();
 			string message = "add_player " + Json.gobject_to_data(player, null);
 			stdout.printf(message);
 			

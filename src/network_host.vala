@@ -43,19 +43,7 @@ public class Network_host : Network {
 		
 		switch(action) {
 		case "add_player" :
-			var parser = new Json.Parser();
-			parser.load_from_data(content);
-			
-			var player_info = parser.get_root().get_object();
-			
-			Player player = new Player(player_info.get_string_member("name"));
-			player.address = player_info.get_string_member("address");
-			
-			stdout.printf("player name: " + player.name);
-			stdout.printf("players address: " + player.address);
-			stdout.printf(content);
-			
-			this.add_player(player);
+			this.process_connected_player(content);	
 			break;
 		default:
 			stdout.printf("Unknown action " + action +" requested\n");
@@ -63,6 +51,17 @@ public class Network_host : Network {
 		}
 	}
 	
+	private void process_connected_player(string player_info) {
+		var parser = new Json.Parser();
+		parser.load_from_data(player_info);
+	
+		var parsed_info = parser.get_root().get_object();
+		
+		Player player = new Player(parsed_info.get_string_member("name"));
+		player.address = parsed_info.get_string_member("address");
+		
+		this.add_player(player);
+	}
 	/*
 	 * Not sure what this function should return.
 	 * But for now it will return player if succesfully added him to the connected connected_players
