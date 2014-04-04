@@ -5,6 +5,7 @@ public abstract class Network : Object {
 	public signal void on_message_sent(bool success);
 	public signal void on_message_received();
 	public signal void new_player_connected(Player player);
+	public signal void game_started();
 	
 	public bool is_on_turn(Player player) {
 		return false;

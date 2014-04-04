@@ -110,27 +110,56 @@ public class Cl_interface : Object, user_interface {
 		
 		if (this.network.connected) {
 			this.network.add_player(this.main_player);
-			stdout.printf("Hosting a game. Waiting for players. \n");
-			this.wait_for_players();
+			
+			this.network.new_player_connected.connect((t, player) => {
+				stdout.printf("New player "+ player.name +" connected.\n");
+				this.get_connected_players();		
+			});
+			
+			stdout.printf("Hosting a game. Waiting for players. \n"+
+				"Type 'start' to start the game\n");
+			
+			this.wait_for_input.begin(() => {
+				this.waitloop.quit();
+			});
+			this.waitloop.run();
+			
 		} else {
 			stdout.printf("Something went wrong\n");
 		}
 	}
 	
+	private async string wait_for_input() {
+		SourceFunc callback = wait_for_input.callback;
+		string output = "";
+		ThreadFunc<string*> run = () => {
+			output = stdin.read_line();
+			Idle.add((owned) callback);
+			return null;
+		};
+		
+		Thread.create<string*>(run, false);
+		
+		yield;
+		return output;
+	}
+	
 	private void wait_for_players() {
 		//Figure out how to asyncly wait for game start
 		this.get_connected_players();
+		
 		this.network.new_player_connected.connect((t, player) => {
 			stdout.printf("New player "+ player.name +" connected.\n");
 			this.get_connected_players();		
 		});
+		
+		this.network.game_started.connect((t) => {
+			this.waitloop.quit();
+		});
+		
 		this.waitloop.run();
-		/*while (true) {
-			if (this.network.is_on_turn(this.main_player))
-				break;
-		}*/
+
 		stdout.printf("You have succesfully waited to this moment");
-		stdin.read_line();
 	}
 	
 	private void get_connected_players() {
