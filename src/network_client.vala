@@ -45,7 +45,11 @@ public class Network_client : Network {
 	private async void send_request(string message) {
 		uint8[] datastream = message.data;
 		datastream += '\0';
-		yield this.connection.output_stream.write_async(datastream, Priority.DEFAULT);
-		stdout.printf("Request sent\n");
+		try {
+			yield this.connection.output_stream.write_async(datastream, Priority.DEFAULT);
+			stdout.printf("Request sent\n");
+		} catch (IOError e) {
+			stderr.printf("%s \n", e.message);
+		}
 	}
 }

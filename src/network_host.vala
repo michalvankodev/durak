@@ -53,14 +53,18 @@ public class Network_host : Network {
 	
 	private void process_connected_player(string player_info) {
 		var parser = new Json.Parser();
-		parser.load_from_data(player_info);
-	
-		var parsed_info = parser.get_root().get_object();
+		try {
+			parser.load_from_data(player_info);
 		
-		Player player = new Player(parsed_info.get_string_member("name"));
-		player.address = parsed_info.get_string_member("address");
+			var parsed_info = parser.get_root().get_object();
 		
-		this.add_player(player);
+			Player player = new Player(parsed_info.get_string_member("name"));
+			player.address = parsed_info.get_string_member("address");
+		
+			this.add_player(player);
+		} catch (Error e) {
+			stderr.printf("%s \n", e.message);
+		}
 	}
 	/*
 	 * Not sure what this function should return.

@@ -132,15 +132,18 @@ public class Cl_interface : Object, user_interface {
 	private async string wait_for_input() {
 		SourceFunc callback = wait_for_input.callback;
 		string output = "";
-		ThreadFunc<string*> run = () => {
+		ThreadFunc<string?> run = () => {
 			output = stdin.read_line();
 			Idle.add((owned) callback);
 			return null;
 		};
+		try {
+			Thread<string> thread = new Thread<string>.try("Input thread", run);
+			output = thread.join();
+		} catch (Error e) {
+			stderr.printf("%s \n", e.message);
+		}
 		
-		Thread.create<string*>(run, false);
-		
-		yield;
 		return output;
 	}
 	
@@ -202,19 +205,16 @@ public class Cl_interface : Object, user_interface {
 			this.options += option;
 		}
 		public void display() {
-			try {
-				stdout.printf(this.text + "\n");
-				
-				int i = 0; 
-				foreach (Option option in this.options) {
-					stdout.printf((++i).to_string() + " - " + option.text + "\n");
-				}
-				
-				this.resolve_menu(stdin.read_line());
-				
-			} catch (Error e) {
-				stdout.printf(e.message);
+			
+			stdout.printf(this.text + "\n");
+			
+			int i = 0; 
+			foreach (Option option in this.options) {
+				stdout.printf((++i).to_string() + " - " + option.text + "\n");
 			}
+			
+			this.resolve_menu(stdin.read_line());
+				
 		}
 		
 		public void resolve_menu(string input) {
