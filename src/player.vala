@@ -1,7 +1,8 @@
 public class Player : Object {
 	private List<Card> hand = new List<Card>();
 	public string name {get; private set;}
-	public string address {get; set; default = "Local";}
+	//public string address {get; set; default = "Local";}
+	//public int id {get; set; default = 0; } // In-game ID earned from HOST
 	
 	public Player(string _name) {
 		this.name = _name;

@@ -4,7 +4,7 @@ public class Network_client : Network {
 	protected SocketConnection connection;
 	
 	public Network_client(string address, Player player) {
-		base.main_player = player;
+		this.main_player = player as Network_player;
 		this.create_connection.begin(address);
 	}
 	private async void create_connection(string address) throws Error {
@@ -26,18 +26,19 @@ public class Network_client : Network {
 		}
 	}
 	
-	public override Player? add_player(Player player) {
+	public override bool add_player(Player player) {
 		try {
-			var netAddress = (InetSocketAddress)this.connection.get_local_address();
-			player.address = netAddress.address.to_string();
-			string message = "add_player " + Json.gobject_to_data(player, null);
+			Network_player new_player = player as Network_player;
+
+			string message = "add_player " + Json.gobject_to_data(new_player, null);
 			stdout.printf(message);
 			
 			this.send_request.begin(message);
-			return player;
+
+			return true;
 		} catch (Error e) {
 			stderr.printf("%s \n", e.message);
-			return null;
+			return false; // player is not in game
 		}
 		
 	}
@@ -52,4 +53,8 @@ public class Network_client : Network {
 			stderr.printf("%s \n", e.message);
 		}
 	}
+	
+	public override void process_connected_player(string player_info, SocketConnection conn) {}
+
+	
 }
