@@ -113,7 +113,7 @@ public class Cl_interface : Object, user_interface {
 			
 			this.network.new_player_connected.connect((t, player) => {
 				stdout.printf("New player "+ player.name +" connected.\n");
-				this.get_connected_players();		
+				this.print_connected_players();		
 			});
 			
 			stdout.printf("Hosting a game. Waiting for players. \n"+
@@ -149,11 +149,11 @@ public class Cl_interface : Object, user_interface {
 	
 	private void wait_for_players() {
 		//Figure out how to asyncly wait for game start
-		this.get_connected_players();
+		this.print_connected_players();
 		
 		this.network.new_player_connected.connect((t, player) => {
 			stdout.printf("New player "+ player.name +" connected.\n");
-			this.get_connected_players();		
+			this.print_connected_players();		
 		});
 		
 		this.network.game_started.connect((t) => {
@@ -165,11 +165,11 @@ public class Cl_interface : Object, user_interface {
 		stdout.printf("You have succesfully waited to this moment");
 	}
 	
-	private void get_connected_players() {
+	private void print_connected_players() {
 		stdout.printf("Players connected:\n");
 		
 		int n = 0;
-		network.connected_players.foreach ((player) => {
+		network.playing_players.foreach ((player) => {
 			stdout.printf((++n).to_string() + ". " + player.name + "\n");
 		});
 	}

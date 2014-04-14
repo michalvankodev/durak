@@ -20,7 +20,6 @@ public class Game_settings : Object {
 		try {
 			string filepath = "settings.json";
 			if (FileUtils.test(filepath, FileTest.EXISTS)) {
-				stdout.printf("file exist");
 				string content;
 				FileUtils.get_contents(filepath, out content);
 				return Json.gobject_from_data(typeof(Game_settings), content) as Game_settings;

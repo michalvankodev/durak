@@ -4,7 +4,7 @@ public class Network_client : Network {
 	protected SocketConnection connection;
 	
 	public Network_client(string address, Player player) {
-		this.main_player = player as Network_player;
+		this.main_player = player;
 		this.create_connection.begin(address);
 	}
 	private async void create_connection(string address) throws Error {
@@ -16,6 +16,8 @@ public class Network_client : Network {
 			
 			this.client = new SocketClient();
 			this.connection = yield this.client.connect_async(socket_address);
+			// New connections will always send their credentials
+			this.send_credentials(this.main_player);
 			
 			this.connected = true;
 			this.on_message_sent(true);
@@ -26,11 +28,22 @@ public class Network_client : Network {
 		}
 	}
 	
+	private void send_credentials(Player player) {
+		try {
+			string message = "new_connection " + Json.gobject_to_data(player, null);
+			stdout.printf(message);
+			
+			this.send_request.begin(message);
+
+		} catch (Error e) {
+			stderr.printf("%s \n", e.message);
+			this.connected = false;
+		}
+	}
+	
 	public override bool add_player(Player player) {
 		try {
-			Network_player new_player = player as Network_player;
-
-			string message = "add_player " + Json.gobject_to_data(new_player, null);
+			string message = "add_player " + Json.gobject_to_data(player, null);
 			stdout.printf(message);
 			
 			this.send_request.begin(message);
@@ -54,7 +67,7 @@ public class Network_client : Network {
 		}
 	}
 	
-	public override void process_connected_player(string player_info, SocketConnection conn) {}
+	public override void add_new_connection(string player_info, SocketConnection conn) {}
 
 	
 }

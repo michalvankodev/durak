@@ -1,8 +1,8 @@
 public abstract class Network : Object {
 	public bool connected {get; set; default = false;}
-	public Network_player main_player {get; set;}
-	//public int main_player_id {get; set;} // Gained from HOST 
-	public List<Network_player> connected_players; // Key = players_id
+	public Player main_player {get; set;}
+
+	public List<Player> playing_players; // Key = players_id
 	public signal void on_message_sent(bool success);
 	public signal void on_message_received();
 	public signal void new_player_connected(Player player);
@@ -13,7 +13,7 @@ public abstract class Network : Object {
 	}
 	
 	public abstract bool add_player(Player player);
-	public abstract void process_connected_player(string player_info, SocketConnection conn);
+	public abstract void add_new_connection(string player_info, SocketConnection conn);
 	
 	protected void process_message(string message, SocketConnection? conn = null) {
 		int split_index = message.index_of(" "); 
@@ -21,8 +21,11 @@ public abstract class Network : Object {
 		string content = message.substring(split_index + 1);
 		
 		switch(action) {
+		case "new_connection" :
+			this.add_new_connection(content, conn);
+			break;
 		case "add_player" :
-			this.process_connected_player(content, conn);
+			//this.add_player(content, conn);
 			//this.send_connected_players();
 			break;
 		default:
