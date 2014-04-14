@@ -1,5 +1,5 @@
 public class Network_connection : Object {
-	public Player player;
+	public Player player {get; set;}
 	public SocketConnection connection {get; set;}
 	public int id {get; set; default = 0;}
 	

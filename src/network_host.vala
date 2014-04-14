@@ -9,6 +9,7 @@ public class Network_host : Network {
 	
 	public Network_host(Player player) {
 		this.main_player = player;
+		this.connection_id = this.next_connection_id();
 		this.create_server();
 		
 		this.playing_players = new List<Player>();
@@ -79,7 +80,8 @@ public class Network_host : Network {
 	}
 
 	public override bool add_player(Player player) {
-
+		this.playing_players.append(player);
+		this.new_player_connected(player);
 		return true;
 	}
 	
