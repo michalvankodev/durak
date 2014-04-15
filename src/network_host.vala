@@ -45,9 +45,10 @@ public class Network_host : Network {
 	private async void process_request(SocketConnection conn) {		
 		try {
 			var dis = new DataInputStream(conn.input_stream);
-			
+			stdout.printf("halo halo \n");
 			string request = yield dis.read_upto_async("\0", 1, Priority.DEFAULT, null, null);
 			dis.read_byte(); //Consume end of stream "\0"
+			stdout.printf(request + "\n");
 			
 			this.process_message(request, conn);
 		} catch (Error e) {

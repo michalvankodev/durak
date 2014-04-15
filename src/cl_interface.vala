@@ -135,7 +135,7 @@ public class Cl_interface : Object, user_interface {
 		ThreadFunc<string?> run = () => {
 			output = stdin.read_line();
 			Idle.add((owned) callback);
-			return null;
+			return output;
 		};
 		try {
 			Thread<string> thread = new Thread<string>.try("Input thread", run);
@@ -143,7 +143,7 @@ public class Cl_interface : Object, user_interface {
 		} catch (Error e) {
 			stderr.printf("%s \n", e.message);
 		}
-		
+		yield;
 		return output;
 	}
 	

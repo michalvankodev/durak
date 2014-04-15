@@ -5,6 +5,7 @@ public class Network_client : Network {
 	
 	public Network_client(string address, Player player) {
 		this.main_player = player;
+		this.playing_players = new List<Player>();
 		this.create_connection.begin(address);
 	}
 	private async void create_connection(string address) throws Error {

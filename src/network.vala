@@ -2,12 +2,14 @@ public abstract class Network : Object {
 	public bool connected {get; set; default = false;}
 	public Player main_player {get; set;}
 	public int connection_id {get; set;}
-
-	public abstract List<Player> playing_players;
+	
+	public List<Player> playing_players;
+	
 	public signal void on_message_sent(bool success);
 	public signal void on_message_received();
 	public signal void new_player_connected(Player player);
 	public signal void game_started();
+	
 	
 	public bool is_on_turn(Player player) {
 		return false;
