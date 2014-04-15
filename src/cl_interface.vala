@@ -139,11 +139,12 @@ public class Cl_interface : Object, user_interface {
 		};
 		try {
 			Thread<string> thread = new Thread<string>.try("Input thread", run);
+			yield;
 			output = thread.join();
 		} catch (Error e) {
 			stderr.printf("%s \n", e.message);
 		}
-		yield;
+		
 		return output;
 	}
 	
