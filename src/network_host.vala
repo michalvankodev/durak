@@ -2,7 +2,6 @@ public class Network_host : Network {
 	protected SocketService server;
 	protected List<Network_connection> connections = new List<Network_connection>();
 	protected int last_connection_id = 0;
-	protected List<Network_worker> workers = new List<Network_worker>();
 	
 	private FileIOStream syncfile_stream;
 	private File syncfile;
@@ -45,11 +44,7 @@ public class Network_host : Network {
 	
 	private void process_new_connection(SocketConnection conn) {
 		stdout.printf("new Connection \n");
-		Network_worker worker = new Network_worker(conn);
-		worker.create.begin();
-		this.workers.append(worker);
-		stdout.printf("worker creted");
-		
+		this.connections.append(new Network_connection(conn, this.next_connection_id()));
 	}
 	
 	private async void process_request(SocketConnection conn) {		
@@ -70,7 +65,7 @@ public class Network_host : Network {
 	
 	
 	public override void add_new_connection(string player_info, SocketConnection conn) {
-		var parser = new Json.Parser();
+	/*	var parser = new Json.Parser();
 		try {
 			parser.load_from_data(player_info);
 		
@@ -88,7 +83,7 @@ public class Network_host : Network {
 		} catch (Error e) {
 			stderr.printf("%s \n", e.message);
 		}
-	}
+*/	}
 
 	public override bool add_player(Player player) {
 		this.playing_players.append(player);
@@ -98,13 +93,13 @@ public class Network_host : Network {
 	
 	
 	private async void send_all(string message) {
-		uint8[] datastream = message.data;
+	/*	uint8[] datastream = message.data;
 		datastream += '\0';
 		
 		yield;
 		this.connections.foreach((net_conn) => {
 			try {
-				var dos = new DataOutputStream(net_conn.connection.output_stream);
+				var dos = new DataOutputStream(net_conn.connection.worker.output_stream);
 				dos.write_async.begin(datastream, Priority.DEFAULT);
 			} catch (IOError e) {
 				stderr.printf("%s \n", e.message);
@@ -116,7 +111,7 @@ public class Network_host : Network {
 		} catch (IOError e) {
 			stderr.printf("%s \n", e.message);
 		}
-	}
+	*/}
 	
 	/* QUESTIONABLE TODO */
 	private async void send_to_player(Player player, string message) {

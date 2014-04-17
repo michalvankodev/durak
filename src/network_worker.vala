@@ -15,7 +15,8 @@ public class Network_worker : Object {
 	
 	public int run() {
 		while (this.canceled == false) {
-			string request =  this.input.read_upto(" ", 1 ,null, null);
+			string request =  this.input.read_upto("\0", 1 ,null, null);
+			stdout.printf(request + "\n");
 			this.message_received(request);
 			this.input.read_byte(); 
 		}
@@ -25,6 +26,8 @@ public class Network_worker : Object {
 	public async void create() {
 		this.canceled = false;
 		this.thread = new Thread<int>("NetworkWorker", run);
+		yield;
+		thread.join();
 	}
 
 }
