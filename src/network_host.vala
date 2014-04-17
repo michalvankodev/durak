@@ -2,6 +2,7 @@ public class Network_host : Network {
 	protected SocketService server;
 	protected List<Network_connection> connections = new List<Network_connection>();
 	protected int last_connection_id = 0;
+	protected List<Network_worker> workers = new List<Network_worker>();
 	
 	private FileIOStream syncfile_stream;
 	private File syncfile;
@@ -38,8 +39,17 @@ public class Network_host : Network {
 	}
 	
 	private bool on_incoming_connection (SocketConnection conn) {
-		this.process_request.begin(conn);
+		this.process_new_connection(conn);
 		return true;
+	}
+	
+	private void process_new_connection(SocketConnection conn) {
+		stdout.printf("new Connection \n");
+		Network_worker worker = new Network_worker(conn);
+		worker.create.begin();
+		this.workers.append(worker);
+		stdout.printf("worker creted");
+		
 	}
 	
 	private async void process_request(SocketConnection conn) {		
