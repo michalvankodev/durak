@@ -83,7 +83,7 @@ public class Cl_interface : Object, user_interface {
 			 * Create MAINLOOP for waiting on the notifications
 			 */		
 			 	
-			ulong handler = this.network.on_message_sent.connect((t, success) => {
+			ulong handler = this.network.on_message_sent.connect((t, message) => {
 				this.waitloop.quit();
 			});
 			
